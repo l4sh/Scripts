@@ -1,0 +1,36 @@
+#! /bin/bash
+#
+# Script Name: newbash
+# Author: l4sh
+# Description: Quickly create new bash scripts
+# License: MIT License
+#
+# Use:
+#		newbash new_script
+#
+
+filename=$1
+alteditor="vim"
+license="MIT License"
+
+_=(${filename//\// })
+name=${_[${#_[@]} - 1]}
+
+scriptheader="#! /bin/bash\n#\n"
+scriptheader+="# Script Name: $filename\n# Author: $USER\n"
+scriptheader+="# Description: **INSERT_DESCRIPTION**\n"
+scriptheader+="# License: $license\n#\n"
+
+if [ ! -f $filename ]; then
+	echo -ne $scriptheader > $filename
+fi
+
+if [ -z "$EDITOR" ]; then
+	EDITOR=$alteditor
+fi
+
+$EDITOR $filename
+
+echo "Making executable..."
+chmod +x $filename
+echo "Done..."

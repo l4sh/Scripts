@@ -1,0 +1,16 @@
+#! /bin/bash
+#
+# Script Name: backup
+# Author: l4sh
+# Description: Create backup of file/folder with date
+# License: MIT License
+#
+# Use:
+#   backup README.md
+#   Backed up ‘README.md’ -> ‘README.md.bak.201411182000’
+#
+
+original=$(echo $1|sed 's/\/$//')
+backup=$original.bak.$(date +%Y%m%d%H%M)
+
+cp -av $original $backup |sed 's/^/Backed up /'

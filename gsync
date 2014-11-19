@@ -1,0 +1,17 @@
+#! /bin/bash
+#
+# Script Name: gsync
+# Author: l4sh
+# Description: Update Google Drive folder using grive
+# License: MIT License
+#
+
+folderToSync=$HOME/"GoogleDrive"
+notifySendCmd="notify-send -t 800 --urgency=low "
+
+$notifySendCmd" Syncing "$folderToSync
+
+grive -p $folderToSync 2>&1|grep "Sync\|Fin"| while read cmdOutput;
+do
+  $notifySendCmd" Grive: $cmdOutput";
+done

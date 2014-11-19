@@ -1,4 +1,13 @@
 #! /usr/bin/lua
+--
+-- Script Name: newbash
+-- Author: l4sh
+-- Description: Generador de nombres de usuario
+--
+-- Uso:
+--	usergen Nombre Apellido
+--	usergen lista_nombres.txt
+--
 
 function generador(var)
    var = var:gsub(".+", string.lower)
@@ -29,7 +38,7 @@ function generador(var)
 end
 
 if not arg[1] then
-   print("----\nPara cargar lista de nombres correr de la siguiente forma:\n   script lista.txt\n----")
+   print("----\nPara cargar lista de nombres correr de la siguiente forma:\n   usergen lista.txt\n----")
    print("Escriba Nombre y Apellido separado por un espacio: ")
    nya = io.read()
    generador(nya)
