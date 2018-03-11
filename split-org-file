@@ -1,0 +1,59 @@
+#! /bin/python3
+# Split org mode notes to different files with the name of the section
+
+from sys import argv, exit
+from os import path, makedirs
+
+
+def get_sections_from_file(input_fname, section_start='* ', fname_space_delim='-'):
+    sections = {}
+
+    with open(input_fname) as input_file:
+        section_name = '_'
+        section_title = ''
+
+        for line in input_file.readlines():
+            if line.startswith(section_start):
+                section_title = line.replace(section_start, '').strip()
+                section_name = section_title.replace(' ', fname_space_delim).lower()
+                sections[section_name] = {
+                    'title': section_title,
+                    'content': ''
+                }
+                continue
+            elif section_name == '_':
+                continue
+
+            section = sections.get(section_name, {})
+            section['content'] = section.get('content', '') + line
+
+    return sections
+
+def write_sections_to_files(sections, output_dname):
+
+    if not path.exists(output_dname):
+        makedirs(output_dname)
+
+    for section_name in sections:
+        output_fname = '{}.org'.format(section_name)
+
+        with open(path.join(output_dname, output_fname), 'w') as output_file:
+            output_file.write('\n'.join([
+                '#+TITLE: {}'.format(sections[section_name].get('title', '')),
+                sections[section_name].get('content', '')
+            ]))
+
+
+if __name__ == '__main__':
+    if len(argv) < 2 or len(argv) > 3:
+        print("Usage: split-org-file <input-file> [<output-dir>]")
+        exit(1)
+
+    input_fname = argv[1]
+    output_dname = '.'
+
+    if len(argv) == 3:
+        output_dname = argv[2]
+
+    sections = get_sections_from_file(input_fname)
+    write_sections_to_files(sections, output_dname)

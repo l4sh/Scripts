@@ -1,0 +1,21 @@
+#! /bin/sh
+# git-commit-at
+# Create a commit using the specified date
+
+if [ -z "$1" ]
+then
+    echo 'Usage: git commit-at DATE'
+    echo 'E.g.'
+    echo '  git commit-at yesterday 12:34'
+    echo '  git commit-at Apr 1 13:37'
+    exit
+fi
+
+
+INPUT_DATE=$@
+DATE_STR=$(date --date="$INPUT_DATE" +%Y-%m-%dT%H:%M:%S%:z)
+
+export GIT_AUTHOR_DATE=$DATE_STR
+export GIT_COMMITTER_DATE=$DATE_STR
+
+git commit

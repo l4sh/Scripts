@@ -1,0 +1,34 @@
+#! /bin/bash
+
+
+GITIGNORE_URL="https://www.gitignore.io/api"
+APPS=$(echo $@ | sed "s/\ /,/g")
+
+if [ -z "$1" ] || [ "$1" = "-h" ] || [ "$1" = "--help" ]
+then
+  echo    "Download gitignores from gitignore.io and append to .gitignore."
+  echo -e "Usage: git ignore [-l] [-a <ignore_str>] [<gitignores>]\n"
+  echo    "  -l, --list        Retrieve list of available ignores from gitignore.io"
+  echo    "  -a, --append      Append patterns to .gitignore"
+  echo    "  -c, --clean       Clean .gitignore"
+  echo -e "  -h, --help        Display this help\n"
+
+elif [ "$1" = "-l" ] || [ "$1" = "--list" ] || [ "$1" = "list" ]
+then
+  echo "Available gitignores"
+  echo "--------------------"
+  curl -s $GITIGNORE_URL/list
+
+elif [ "$1" = "-a" ] || [ "$1" = "--append" ]
+then
+  echo ${@:2} | sed 's/\ /\n/g' | tee -a .gitignore
+elif [ "$1" = "-c" ] || [ "$1" = "--clean" ]
+then
+  echo "# .gitignore" > .gitignore
+else
+  curl -s $GITIGNORE_URL/$APPS | grep -v "#!! ERROR" | tee -a .gitignore
+  if [ $? -eq 0 ]
+  then
+    echo "Added $@ to .gitignore"
+  fi
+fi

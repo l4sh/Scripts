@@ -1,0 +1,11 @@
+#! /bin/bash
+
+IMAGE=/tmp/lockscreen.png
+scrot $IMAGE
+
+convert -limit memory 4096 -scale %10 -scale 1000% $IMAGE $IMAGE
+
+/usr/bin/i3lock -i $IMAGE
+rm $IMAGE
+
+

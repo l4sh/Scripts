@@ -1,0 +1,4 @@
+#!/bin/sh
+# Make window with the specified title floating by default on i3wm
+
+i3-msg "for_window [class=\"$1\"] floating enable"
